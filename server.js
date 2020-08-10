@@ -15,10 +15,14 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost/budget", {
-  useNewUrlParser: true,
-  useFindAndModify: false
-});
+if (process.env.MONGODB_URI) {
+  mongoose.connect(process.env.MONGODB_URI);
+} else {
+  mongoose.connect("mongodb://localhost/budget", {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+  });
+}
 
 // routes
 app.use(require("./routes/api.js"));
