@@ -15,13 +15,15 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-var databaseUri = "mongodb://localhost/budget";
+var databaseUri = process.env.MONGODB_URI || "mongodb://localhost/budget";
 
-if (process.env.MONGODB_URI) {
-  mongoose.connect(process.env.MONGODB_URI);
-} else {
-  mongoose.connect(databaseUri);
-}
+// if (process.env.MONGODB_URI) {
+//   mongoose.connect(process.env.MONGODB_URI);
+// } else {
+//   mongoose.connect(databaseUri);
+// }
+mongoose.connect(databaseUri);
+
 var db = mongoose.connection;
 
 db.on("error", function (err) {
