@@ -15,15 +15,21 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
+var databaseUri = "mongodb://localhost/budget";
+
 if (process.env.MONGODB_URI) {
   mongoose.connect(process.env.MONGODB_URI);
 } else {
-  mongoose.connect("mongodb://localhost/budget", {
-    useNewUrlParser: true,
-    useFindAndModify: false,
-  });
+  mongoose.connect(databaseUri);
 }
+var db = mongoose.connection;
 
+db.on("error", function (err) {
+  console.log("Mongoose Error: ", err);
+});
+db.once("open", function (err) {
+  console.log("Mongoose connection successful.");
+});
 // routes
 app.use(require("./routes/api.js"));
 
