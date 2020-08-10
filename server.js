@@ -14,26 +14,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(express.static("public"));
+app.use(express.static("public"));
 
-var databaseUri = process.env.MONGODB_URI;
-
-// || "mongodb://localhost/budget";
-
-// if (process.env.MONGODB_URI) {
-//   mongoose.connect(process.env.MONGODB_URI);
-// } else {
-//   mongoose.connect(databaseUri);
-// }
-mongoose.connect(databaseUri);
-
-var db = mongoose.connection;
-
-db.on("error", function (err) {
-  console.log("Mongoose Error: ", err);
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/budget", {
+  useNewUrlParser: true,
+  useFindAndModify: false,
 });
-db.once("open", function (err) {
-  console.log("Mongoose connection successful.");
-});
+
 // routes
 app.use(require("./routes/api.js"));
 
